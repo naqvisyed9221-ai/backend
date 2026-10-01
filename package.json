@@ -1,0 +1,38 @@
+{
+  "name": "smart-canteen-backend",
+  "version": "1.0.0",
+  "description": "Smart Canteen Pre-Order & Queue Management System - Backend API",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
+  },
+  "keywords": [
+    "canteen",
+    "pre-order",
+    "queue-management",
+    "tokens",
+    "kitchen-workflow",
+    "hackathon"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.4",
+    "express": "^5.2.1",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.10.3",
+    "morgan": "^1.12.1",
+    "pg": "^8.23.0",
+    "qrcode": "^1.5.4",
+    "socket.io": "^4.8.3",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
