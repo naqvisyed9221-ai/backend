@@ -1,12 +1,20 @@
+const dns = require('dns');
 const mongoose = require('mongoose');
+
+// Configure reliable DNS servers to ensure SRV record resolution across all Windows network adapters
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
+} catch (e) {
+  // Use system default DNS if setServers is unavailable
+}
 
 /**
  * Robust MongoDB Connection Manager
  * Features:
+ * - Public DNS fallback for Windows SRV queries
  * - Connection pooling (maxPoolSize, minPoolSize)
  * - Auto-reconnect listeners with logging
  * - Graceful shutdown handling
- * - Configurable socket & selection timeouts
  */
 const connectDB = async () => {
   const uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/smart_canteen';
