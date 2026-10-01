@@ -1,21 +1,15 @@
 const dns = require('dns');
 const mongoose = require('mongoose');
 
-// Configure reliable DNS servers to ensure Atlas SRV record resolution across all Windows network adapters
+// Configure reliable DNS servers to ensure Atlas SRV record resolution on Windows network adapters
 try {
   dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
 } catch (e) {
-  // Use system default DNS if setServers is unavailable
+  // Fallback to default system DNS
 }
 
 /**
  * Robust MongoDB Connection Manager
- * Features:
- * - Public DNS fallback for Windows SRV queries
- * - TLS/SSL compatibility settings
- * - Connection pooling (maxPoolSize, minPoolSize)
- * - Auto-reconnect listeners with logging
- * - Graceful shutdown handling
  */
 const connectDB = async () => {
   const uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/smart_canteen';
@@ -24,10 +18,7 @@ const connectDB = async () => {
     serverSelectionTimeoutMS: 10000,
     socketTimeoutMS: 45000,
     maxPoolSize: 50,
-    minPoolSize: 5,
-    family: 4, // Force IPv4
-    tls: uri.includes('mongodb+srv') || uri.includes('ssl=true'),
-    tlsAllowInvalidCertificates: true
+    minPoolSize: 5
   };
 
   try {
@@ -54,7 +45,7 @@ mongoose.connection.on('error', (err) => {
 });
 
 mongoose.connection.on('disconnected', () => {
-  console.warn('[MongoDB Lifecycle] Mongoose disconnected from DB. Retrying...');
+  console.warn('[MongoDB Lifecycle] Mongoose disconnected from DB');
 });
 
 // Process signal handlers for graceful shutdown
