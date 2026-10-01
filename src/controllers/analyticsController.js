@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Order = require('../models/Order');
 const MenuItem = require('../models/MenuItem');
+const SystemLog = require('../models/SystemLog');
 const asyncHandler = require('../utils/asyncHandler');
 const { ORDER_STATUS } = require('../config/constants');
 
@@ -167,6 +168,24 @@ const getManagementAnalytics = asyncHandler(async (req, res) => {
   const delayedCount = orders.filter((o) => o.is_delayed || o.order_status === ORDER_STATUS.DELAYED).length;
   const delayedOrderPercentage = orders.length > 0 ? Number(((delayedCount / orders.length) * 100).toFixed(1)) : 0;
 
+  const ordersByTimeMap = {};
+  orders.forEach((o) => {
+    const hour = new Date(o.order_time).getHours();
+    const label = `${String(hour).padStart(2, '0')}:00`;
+    ordersByTimeMap[label] = (ordersByTimeMap[label] || 0) + 1;
+  });
+
+  const stockLogs = await SystemLog.find({ action: 'STOCK_AVAILABILITY_UPDATED' })
+    .sort({ createdAt: -1 })
+    .limit(100)
+    .select('details createdAt');
+  const availabilityHistory = stockLogs.map((log) => ({
+    itemId: log.details?.itemId,
+    quantity: log.details?.quantity,
+    status: log.details?.status,
+    updatedAt: log.createdAt
+  }));
+
   return res.json({
     message: 'Management analytics retrieved',
     data: {
@@ -174,6 +193,8 @@ const getManagementAnalytics = asyncHandler(async (req, res) => {
       salesByFoodItem,
       pickupSlotUsage: slotUsage,
       cancellationReasons,
+      ordersByTime: ordersByTimeMap,
+      availabilityHistory,
       delayedOrderPercentage: `${delayedOrderPercentage}%`,
       totalOrdersAnalyzed: orders.length
     }
