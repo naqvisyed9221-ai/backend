@@ -188,8 +188,36 @@ const getMe = asyncHandler(async (req, res) => {
   });
 });
 
+const getPreferences = asyncHandler(async (req, res) => {
+  return res.json({ data: req.user.preferences });
+});
+
+const updatePreferences = asyncHandler(async (req, res) => {
+  const allowedFields = [
+    'vegetarianOnly',
+    'veganOnly',
+    'glutenFree',
+    'nutAllergyWarning',
+    'preferredPickupSlot',
+    'maxDailyBudget',
+    'notifyOnReady',
+    'notifyOnDelay'
+  ];
+
+  for (const field of allowedFields) {
+    if (req.body[field] !== undefined) {
+      req.user.preferences[field] = req.body[field];
+    }
+  }
+
+  await req.user.save();
+  return res.json({ data: req.user.preferences });
+});
+
 module.exports = {
   register,
   login,
-  getMe
+  getMe,
+  getPreferences,
+  updatePreferences
 };

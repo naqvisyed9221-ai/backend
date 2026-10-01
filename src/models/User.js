@@ -35,6 +35,16 @@ const userSchema = new mongoose.Schema(
     phone: {
       type: String,
       default: ''
+    },
+    preferences: {
+      vegetarianOnly: { type: Boolean, default: false },
+      veganOnly: { type: Boolean, default: false },
+      glutenFree: { type: Boolean, default: false },
+      nutAllergyWarning: { type: Boolean, default: true },
+      preferredPickupSlot: { type: String, default: '1:15 PM - 1:30 PM' },
+      maxDailyBudget: { type: Number, default: 15, min: 0 },
+      notifyOnReady: { type: Boolean, default: true },
+      notifyOnDelay: { type: Boolean, default: true }
     }
   },
   {
