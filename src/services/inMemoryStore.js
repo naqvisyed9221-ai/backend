@@ -56,30 +56,30 @@ const memoryUsers = [
   }
 ];
 
-// 2. Seed Menu Items
+// 2. Seed Rich Menu Items (16 diverse items across Fast Food, Meals, Beverages, Snacks, Desserts)
 let memoryMenuItems = [
   {
     _id: '64f1a2b3c4d5e6f7a8b9c001',
     item_id: 'ITEM-1001',
-    item_name: 'Chicken Burger',
+    item_name: 'Chicken Deluxe Burger',
     category: 'Fast Food',
     price: 450,
-    available_quantity: 12,
+    available_quantity: 25,
     preparation_time: 8,
     status: MENU_ITEM_STATUS.AVAILABLE,
-    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600',
+    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80',
     total_orders_count: 142
   },
   {
     _id: '64f1a2b3c4d5e6f7a8b9c002',
     item_id: 'ITEM-1002',
-    item_name: 'French Fries',
+    item_name: 'Golden Crispy Fries',
     category: 'Fast Food',
     price: 200,
-    available_quantity: 25,
+    available_quantity: 35,
     preparation_time: 5,
     status: MENU_ITEM_STATUS.AVAILABLE,
-    image: 'https://images.unsplash.com/photo-1576107232684-1279f3908594?w=600',
+    image: 'https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&w=600&q=80',
     total_orders_count: 215
   },
   {
@@ -88,22 +88,22 @@ let memoryMenuItems = [
     item_name: 'Cold Drink 500ml',
     category: 'Beverages',
     price: 100,
-    available_quantity: 40,
+    available_quantity: 50,
     preparation_time: 2,
     status: MENU_ITEM_STATUS.AVAILABLE,
-    image: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=600',
+    image: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=600&q=80',
     total_orders_count: 310
   },
   {
     _id: '64f1a2b3c4d5e6f7a8b9c004',
     item_id: 'ITEM-1004',
-    item_name: 'Club Sandwich',
+    item_name: 'Club Sandwich Supreme',
     category: 'Fast Food',
     price: 380,
-    available_quantity: 15,
+    available_quantity: 20,
     preparation_time: 7,
     status: MENU_ITEM_STATUS.AVAILABLE,
-    image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600',
+    image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=600&q=80',
     total_orders_count: 98
   },
   {
@@ -112,22 +112,22 @@ let memoryMenuItems = [
     item_name: 'Chicken Shawarma Wrap',
     category: 'Fast Food',
     price: 320,
-    available_quantity: 4,
+    available_quantity: 18,
     preparation_time: 6,
-    status: MENU_ITEM_STATUS.LIMITED,
-    image: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=600',
+    status: MENU_ITEM_STATUS.AVAILABLE,
+    image: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=600&q=80',
     total_orders_count: 165
   },
   {
     _id: '64f1a2b3c4d5e6f7a8b9c006',
     item_id: 'ITEM-1006',
-    item_name: 'Fresh Garden Salad',
+    item_name: 'Fresh Garden Salad Bowl',
     category: 'Meals',
     price: 250,
-    available_quantity: 8,
+    available_quantity: 15,
     preparation_time: 4,
     status: MENU_ITEM_STATUS.AVAILABLE,
-    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600',
+    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80',
     total_orders_count: 54
   },
   {
@@ -136,11 +136,119 @@ let memoryMenuItems = [
     item_name: 'Hot Cappuccino',
     category: 'Beverages',
     price: 180,
-    available_quantity: 30,
+    available_quantity: 40,
     preparation_time: 3,
     status: MENU_ITEM_STATUS.AVAILABLE,
-    image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600',
+    image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80',
     total_orders_count: 180
+  },
+  {
+    _id: '64f1a2b3c4d5e6f7a8b9c008',
+    item_id: 'ITEM-1008',
+    item_name: 'Artisanal Veggie Buddha Bowl',
+    category: 'Meals',
+    price: 420,
+    available_quantity: 14,
+    preparation_time: 9,
+    status: MENU_ITEM_STATUS.AVAILABLE,
+    image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80',
+    total_orders_count: 62
+  },
+  {
+    _id: '64f1a2b3c4d5e6f7a8b9c009',
+    item_id: 'ITEM-1009',
+    item_name: 'Classic Iced Matcha Latte',
+    category: 'Beverages',
+    price: 260,
+    available_quantity: 30,
+    preparation_time: 4,
+    status: MENU_ITEM_STATUS.AVAILABLE,
+    image: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=600&q=80',
+    total_orders_count: 110
+  },
+  {
+    _id: '64f1a2b3c4d5e6f7a8b9c010',
+    item_id: 'ITEM-1010',
+    item_name: 'Spicy Paneer Tikka Wrap',
+    category: 'Meals',
+    price: 340,
+    available_quantity: 16,
+    preparation_time: 8,
+    status: MENU_ITEM_STATUS.AVAILABLE,
+    image: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80',
+    total_orders_count: 85
+  },
+  {
+    _id: '64f1a2b3c4d5e6f7a8b9c011',
+    item_id: 'ITEM-1011',
+    item_name: 'Double Chocolate Fudge Brownie',
+    category: 'Desserts',
+    price: 220,
+    available_quantity: 22,
+    preparation_time: 3,
+    status: MENU_ITEM_STATUS.AVAILABLE,
+    image: 'https://images.unsplash.com/photo-1564355808539-22fda35bed7e?auto=format&fit=crop&w=600&q=80',
+    total_orders_count: 140
+  },
+  {
+    _id: '64f1a2b3c4d5e6f7a8b9c012',
+    item_id: 'ITEM-1012',
+    item_name: 'Smokey BBQ Beef Burger',
+    category: 'Fast Food',
+    price: 520,
+    available_quantity: 18,
+    preparation_time: 10,
+    status: MENU_ITEM_STATUS.AVAILABLE,
+    image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80',
+    total_orders_count: 94
+  },
+  {
+    _id: '64f1a2b3c4d5e6f7a8b9c013',
+    item_id: 'ITEM-1013',
+    item_name: 'Crispy Chicken Zinger Roll',
+    category: 'Fast Food',
+    price: 360,
+    available_quantity: 20,
+    preparation_time: 6,
+    status: MENU_ITEM_STATUS.AVAILABLE,
+    image: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=600&q=80',
+    total_orders_count: 130
+  },
+  {
+    _id: '64f1a2b3c4d5e6f7a8b9c014',
+    item_id: 'ITEM-1014',
+    item_name: 'Mango Passion Fruit Cooler',
+    category: 'Beverages',
+    price: 190,
+    available_quantity: 35,
+    preparation_time: 3,
+    status: MENU_ITEM_STATUS.AVAILABLE,
+    image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80',
+    total_orders_count: 175
+  },
+  {
+    _id: '64f1a2b3c4d5e6f7a8b9c015',
+    item_id: 'ITEM-1015',
+    item_name: 'Cheesy Garlic Bread Sticks',
+    category: 'Snacks',
+    price: 240,
+    available_quantity: 28,
+    preparation_time: 6,
+    status: MENU_ITEM_STATUS.AVAILABLE,
+    image: 'https://images.unsplash.com/photo-1619881589146-c23f20f0a48b?auto=format&fit=crop&w=600&q=80',
+    total_orders_count: 88
+  },
+  {
+    _id: '64f1a2b3c4d5e6f7a8b9c016',
+    item_id: 'ITEM-1016',
+    item_name: 'Velvety Red Velvet Pastry',
+    category: 'Desserts',
+    price: 250,
+    available_quantity: 15,
+    preparation_time: 2,
+    status: MENU_ITEM_STATUS.AVAILABLE,
+    image: 'https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?auto=format&fit=crop&w=600&q=80',
+    total_orders_count: 70
   }
 ];
 
@@ -154,7 +262,7 @@ let memoryOrders = [
     token_number: 'C-021',
     qr_code: '',
     items: [
-      { order_item_id: 'OI-101', item_id: 'ITEM-1001', item_name: 'Chicken Burger', quantity: 1, price: 450, special_instruction: 'Extra mayo' },
+      { order_item_id: 'OI-101', item_id: 'ITEM-1001', item_name: 'Chicken Deluxe Burger', quantity: 1, price: 450, special_instruction: 'Extra mayo' },
       { order_item_id: 'OI-102', item_id: 'ITEM-1003', item_name: 'Cold Drink 500ml', quantity: 1, price: 100 }
     ],
     total_amount: 550,
@@ -180,7 +288,7 @@ let memoryOrders = [
     token_number: 'C-022',
     qr_code: '',
     items: [
-      { order_item_id: 'OI-103', item_id: 'ITEM-1004', item_name: 'Club Sandwich', quantity: 2, price: 380, special_instruction: 'Toasted well' }
+      { order_item_id: 'OI-103', item_id: 'ITEM-1004', item_name: 'Club Sandwich Supreme', quantity: 2, price: 380, special_instruction: 'Toasted well' }
     ],
     total_amount: 760,
     order_time: new Date(Date.now() - 18 * 60000),
@@ -206,8 +314,8 @@ let memoryOrders = [
     token_number: 'C-023',
     qr_code: '',
     items: [
-      { order_item_id: 'OI-104', item_id: 'ITEM-1001', item_name: 'Chicken Burger', quantity: 2, price: 450, special_instruction: 'No onions' },
-      { order_item_id: 'OI-105', item_id: 'ITEM-1002', item_name: 'French Fries', quantity: 1, price: 200 }
+      { order_item_id: 'OI-104', item_id: 'ITEM-1001', item_name: 'Chicken Deluxe Burger', quantity: 2, price: 450, special_instruction: 'No onions' },
+      { order_item_id: 'OI-105', item_id: 'ITEM-1002', item_name: 'Golden Crispy Fries', quantity: 1, price: 200 }
     ],
     total_amount: 1100,
     order_time: new Date(Date.now() - 5 * 60000),
