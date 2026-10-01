@@ -28,8 +28,25 @@ app.use(cors({ origin: allowedOrigin, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve frontend client statically
-app.use(express.static(path.join(__dirname, '../../frontend')));
+// Root API Info
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ONLINE',
+    project: 'Smart Canteen Pre-Order & Queue Management System API',
+    version: '1.0.0',
+    documentation: '/api/health',
+    endpoints: [
+      '/api/auth',
+      '/api/menu',
+      '/api/orders',
+      '/api/queue',
+      '/api/collection',
+      '/api/analytics',
+      '/api/ai',
+      '/api/admin'
+    ]
+  });
+});
 
 if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('dev'));
@@ -55,16 +72,14 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/admin', adminRoutes);
 
-// Catch-all route handler for Express 5 compatibility (Criterion A10)
-app.use((req, res, next) => {
-  if (req.path.startsWith('/api')) {
-    return res.status(404).json({
-      message: `API endpoint not found: ${req.method} ${req.originalUrl}`,
-      details: null
-    });
-  }
-  res.sendFile(path.join(__dirname, '../../frontend/index.html'));
+// Catch-all 404 route handler for Express 5 (Criterion A10)
+app.use((req, res) => {
+  res.status(404).json({
+    message: `API endpoint not found: ${req.method} ${req.originalUrl}`,
+    details: null
+  });
 });
+
 
 // Centralized error handling
 app.use(errorHandler);
