@@ -117,6 +117,32 @@ const getDashboardMetrics = asyncHandler(async (req, res) => {
  * Detailed Management Analytics
  */
 const getManagementAnalytics = asyncHandler(async (req, res) => {
+  if (mongoose.connection.readyState !== 1) {
+    return res.json({
+      message: 'Management analytics retrieved from demo data',
+      data: {
+        salesByDay: [
+          { date: new Date().toISOString().slice(0, 10), revenue: 48200, orderCount: 186 }
+        ],
+        salesByFoodItem: [
+          { itemName: 'Chicken Burger', quantitySold: 72, revenue: 32400 },
+          { itemName: 'French Fries', quantitySold: 51, revenue: 10200 },
+          { itemName: 'Fresh Garden Salad', quantitySold: 8, revenue: 2000 }
+        ],
+        pickupSlotUsage: {
+          '1:00 PM - 1:15 PM': 20,
+          '1:15 PM - 1:30 PM': 18,
+          '1:30 PM - 1:45 PM': 14
+        },
+        cancellationReasons: { 'Customer cancelled': 6, 'Stock unavailable': 3, Unspecified: 2 },
+        ordersByTime: { '12:00': 22, '13:00': 86, '14:00': 48, '15:00': 30 },
+        availabilityHistory: [],
+        delayedOrderPercentage: '4.3%',
+        totalOrdersAnalyzed: 186
+      }
+    });
+  }
+
   const orders = await Order.find().sort({ order_time: -1 }).limit(500);
 
   const salesByDayMap = {};
