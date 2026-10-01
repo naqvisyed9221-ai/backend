@@ -12,6 +12,15 @@ const { startBackgroundMonitor } = require('./services/cronService');
 
 const PORT = process.env.PORT || 5000;
 
+// Catch unexpected exceptions and unhandled promise rejections so nodemon does not crash
+process.on('uncaughtException', (err) => {
+  console.error('[Uncaught Exception]', err.message);
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('[Unhandled Rejection]', reason?.message || reason);
+});
+
 const startServer = async () => {
   const server = http.createServer(app);
 
@@ -45,6 +54,16 @@ const startServer = async () => {
     });
   });
 
+  // Handle server-level errors gracefully
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`[Server Error] Port ${PORT} is already in use by another running process.`);
+      console.info(`[Action Required] Terminate the old process or restart the terminal.`);
+    } else {
+      console.error('[Server Error]', err.message);
+    }
+  });
+
   // Start HTTP & WebSocket server
   server.listen(PORT, () => {
     console.log(`================================================================`);
@@ -62,10 +81,11 @@ const startServer = async () => {
     if (isConnected) {
       seedInitialData();
     }
+  }).catch((dbErr) => {
+    console.warn(`[Database Handled Error]: ${dbErr.message}`);
   });
 };
 
 startServer().catch((err) => {
   console.error('Fatal Server Error:', err);
-  process.exit(1);
 });
