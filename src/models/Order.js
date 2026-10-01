@@ -146,13 +146,12 @@ orderSchema.index(
 );
 
 // Auto-assign order_id if not present
-orderSchema.pre('save', function (next) {
+orderSchema.pre('save', function () {
   if (!this.order_id) {
     const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
     const rand = Math.floor(1000 + Math.random() * 9000);
     this.order_id = `ORD-${dateStr}-${rand}`;
   }
-  next();
 });
 
 module.exports = mongoose.model('Order', orderSchema);

@@ -60,7 +60,7 @@ const menuItemSchema = new mongoose.Schema(
 );
 
 // Auto-generate item_id if not provided
-menuItemSchema.pre('save', function (next) {
+menuItemSchema.pre('save', function () {
   if (!this.item_id) {
     this.item_id = 'ITEM-' + Math.floor(1000 + Math.random() * 9000);
   }
@@ -73,8 +73,6 @@ menuItemSchema.pre('save', function (next) {
   } else if (this.status === MENU_ITEM_STATUS.SOLD_OUT && this.available_quantity > 0) {
     this.status = MENU_ITEM_STATUS.AVAILABLE;
   }
-
-  next();
 });
 
 module.exports = mongoose.model('MenuItem', menuItemSchema);
