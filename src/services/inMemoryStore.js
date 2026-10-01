@@ -79,7 +79,7 @@ let memoryMenuItems = [
     available_quantity: 35,
     preparation_time: 5,
     status: MENU_ITEM_STATUS.AVAILABLE,
-    image: 'https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80',
     total_orders_count: 215
   },
   {
@@ -235,7 +235,7 @@ let memoryMenuItems = [
     available_quantity: 28,
     preparation_time: 6,
     status: MENU_ITEM_STATUS.AVAILABLE,
-    image: 'https://images.unsplash.com/photo-1619881589146-c23f20f0a48b?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80',
     total_orders_count: 88
   },
   {

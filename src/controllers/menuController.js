@@ -7,7 +7,7 @@ const { MENU_ITEM_STATUS } = require('../config/constants');
 // Seed items fallback if MongoDB is in offline mode
 const FALLBACK_MENU_ITEMS = [
   { _id: '64f1a2b3c4d5e6f7a8b9c001', item_id: 'ITEM-1001', item_name: 'Chicken Burger', category: 'Fast Food', price: 450, available_quantity: 12, preparation_time: 8, status: 'Available', image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600' },
-  { _id: '64f1a2b3c4d5e6f7a8b9c002', item_id: 'ITEM-1002', item_name: 'French Fries', category: 'Fast Food', price: 200, available_quantity: 25, preparation_time: 5, status: 'Available', image: 'https://images.unsplash.com/photo-1576107232684-1279f3908594?w=600' },
+  { _id: '64f1a2b3c4d5e6f7a8b9c002', item_id: 'ITEM-1002', item_name: 'French Fries', category: 'Fast Food', price: 200, available_quantity: 25, preparation_time: 5, status: 'Available', image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600' },
   { _id: '64f1a2b3c4d5e6f7a8b9c003', item_id: 'ITEM-1003', item_name: 'Cold Drink 500ml', category: 'Beverages', price: 100, available_quantity: 40, preparation_time: 2, status: 'Available', image: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=600' },
   { _id: '64f1a2b3c4d5e6f7a8b9c004', item_id: 'ITEM-1004', item_name: 'Club Sandwich', category: 'Fast Food', price: 380, available_quantity: 15, preparation_time: 7, status: 'Available', image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600' },
   { _id: '64f1a2b3c4d5e6f7a8b9c005', item_id: 'ITEM-1005', item_name: 'Chicken Shawarma Wrap', category: 'Fast Food', price: 320, available_quantity: 4, preparation_time: 6, status: 'Limited', image: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=600' },
