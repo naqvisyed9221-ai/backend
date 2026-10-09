@@ -72,7 +72,7 @@ let memoryCanteens = [
   { _id: 'cant_003', name: 'Hostel Night Canteen', location: 'Residential Quad Building C', opening_time: '18:00', closing_time: '02:00', is_active: true, contact_number: '+92 300 7778899', createdAt: new Date() },
 ];
 
-// 2. Seed Menu Items
+// 2. Seed Rich Menu Items
 let memoryMenuItems = [
   {
     _id: '64f1a2b3c4d5e6f7a8b9c001',
@@ -507,3 +507,4 @@ const InMemoryStore = {
 };
 
 module.exports = InMemoryStore;
+
