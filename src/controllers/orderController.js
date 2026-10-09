@@ -646,7 +646,6 @@ const reorderPastOrder = asyncHandler(async (req, res) => {
         can_proceed: validItems.length > 0
       }
     });
-  }
 });
 
 /**
