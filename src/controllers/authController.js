@@ -189,7 +189,17 @@ const getMe = asyncHandler(async (req, res) => {
 });
 
 const getPreferences = asyncHandler(async (req, res) => {
-  return res.json({ data: req.user.preferences });
+  const defaultPrefs = {
+    vegetarianOnly: false,
+    veganOnly: false,
+    glutenFree: false,
+    nutAllergyWarning: false,
+    preferredPickupSlot: "13:00-13:15",
+    maxDailyBudget: 500,
+    notifyOnReady: true,
+    notifyOnDelay: true
+  };
+  return res.json({ data: { ...defaultPrefs, ...(req.user.preferences || {}) } });
 });
 
 const updatePreferences = asyncHandler(async (req, res) => {
@@ -204,13 +214,35 @@ const updatePreferences = asyncHandler(async (req, res) => {
     'notifyOnDelay'
   ];
 
+  if (!req.user.preferences) {
+    req.user.preferences = {
+      vegetarianOnly: false,
+      veganOnly: false,
+      glutenFree: false,
+      nutAllergyWarning: false,
+      preferredPickupSlot: "13:00-13:15",
+      maxDailyBudget: 500,
+      notifyOnReady: true,
+      notifyOnDelay: true
+    };
+  }
+
   for (const field of allowedFields) {
     if (req.body[field] !== undefined) {
       req.user.preferences[field] = req.body[field];
     }
   }
 
-  await req.user.save();
+  if (typeof req.user.save === 'function') {
+    await req.user.save();
+  } else {
+    const InMemoryStore = require('../services/inMemoryStore');
+    const memUser = InMemoryStore.findUserById(req.user._id);
+    if (memUser) {
+      memUser.preferences = req.user.preferences;
+    }
+  }
+
   return res.json({ data: req.user.preferences });
 });
 
