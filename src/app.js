@@ -11,6 +11,7 @@ const collectionRoutes = require('./routes/collectionRoutes');
 const analyticsRoutes = require('./routes/analyticsRoutes');
 const aiRoutes = require('./routes/aiRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const managerRoutes = require('./routes/managerRoutes');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -43,6 +44,7 @@ app.get('/', (req, res) => {
       '/api/collection',
       '/api/analytics',
       '/api/ai',
+      '/api/manager',
       '/api/admin'
     ]
   });
@@ -70,6 +72,7 @@ app.use('/api/queue', queueRoutes);
 app.use('/api/collection', collectionRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/manager', managerRoutes);
 app.use('/api/admin', adminRoutes);
 
 // Catch-all 404 route handler for Express 5 (Criterion A10)

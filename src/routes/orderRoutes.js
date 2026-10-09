@@ -5,12 +5,22 @@ const {
   getOrders,
   getOrderById,
   cancelOrder,
-  getPickupSlots
+  getPickupSlots,
+  reorderPastOrder,
+  updatePaymentStatus,
+  updateOrderPickupTime
 } = require('../controllers/orderController');
 const { authenticate } = require('../middleware/auth');
 const { authorize } = require('../middleware/rbac');
 const { ROLES } = require('../config/constants');
-const { validate, validateObjectId, createOrderSchema, cancelOrderSchema } = require('../middleware/validate');
+const {
+  validate,
+  validateObjectId,
+  createOrderSchema,
+  cancelOrderSchema,
+  updatePaymentStatusSchema,
+  updatePickupTimeSchema
+} = require('../middleware/validate');
 
 // Pickup slots inquiry
 router.get('/pickup-slots', getPickupSlots);
@@ -46,6 +56,32 @@ router.post(
   validateObjectId('id'),
   validate(cancelOrderSchema),
   cancelOrder
+);
+
+// Reorder past order (Phase 1: Customer Reordering)
+router.post(
+  '/:id/reorder',
+  authenticate,
+  validateObjectId('id'),
+  reorderPastOrder
+);
+
+// Update payment status (Phase 2: Payment Status Tracking)
+router.patch(
+  '/:id/payment',
+  authenticate,
+  validateObjectId('id'),
+  validate(updatePaymentStatusSchema),
+  updatePaymentStatus
+);
+
+// Update scheduled pickup time (Phase 3: Pickup Time Change Notifications)
+router.patch(
+  '/:id/pickup-time',
+  authenticate,
+  validateObjectId('id'),
+  validate(updatePickupTimeSchema),
+  updateOrderPickupTime
 );
 
 module.exports = router;

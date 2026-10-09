@@ -5,12 +5,28 @@ const {
   updateUserRoleAndStatus,
   getSystemLogs,
   getCanteenSettings,
-  updateCanteenSettings
+  updateCanteenSettings,
+  getAllCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+  getAllCanteens,
+  createCanteen,
+  updateCanteen,
+  deleteCanteen
 } = require('../controllers/adminController');
 const { authenticate } = require('../middleware/auth');
 const { authorize } = require('../middleware/rbac');
 const { ROLES } = require('../config/constants');
-const { validate, validateObjectId, canteenSettingsSchema } = require('../middleware/validate');
+const {
+  validate,
+  validateObjectId,
+  canteenSettingsSchema,
+  categorySchema,
+  updateCategorySchema,
+  canteenAccountSchema,
+  updateCanteenAccountSchema
+} = require('../middleware/validate');
 
 // Settings management
 router.get(
@@ -48,6 +64,72 @@ router.get(
   authenticate,
   authorize(ROLES.ADMIN),
   getSystemLogs
+);
+
+// Category Management Routes (Phase 5)
+router.get(
+  '/categories',
+  authenticate,
+  authorize(ROLES.ADMIN, ROLES.MANAGER),
+  getAllCategories
+);
+
+router.post(
+  '/categories',
+  authenticate,
+  authorize(ROLES.ADMIN),
+  validate(categorySchema),
+  createCategory
+);
+
+router.patch(
+  '/categories/:id',
+  authenticate,
+  authorize(ROLES.ADMIN),
+  validateObjectId('id'),
+  validate(updateCategorySchema),
+  updateCategory
+);
+
+router.delete(
+  '/categories/:id',
+  authenticate,
+  authorize(ROLES.ADMIN),
+  validateObjectId('id'),
+  deleteCategory
+);
+
+// Canteen Hubs & Accounts Management Routes (Phase 5)
+router.get(
+  '/canteens',
+  authenticate,
+  authorize(ROLES.ADMIN, ROLES.MANAGER),
+  getAllCanteens
+);
+
+router.post(
+  '/canteens',
+  authenticate,
+  authorize(ROLES.ADMIN),
+  validate(canteenAccountSchema),
+  createCanteen
+);
+
+router.patch(
+  '/canteens/:id',
+  authenticate,
+  authorize(ROLES.ADMIN),
+  validateObjectId('id'),
+  validate(updateCanteenAccountSchema),
+  updateCanteen
+);
+
+router.delete(
+  '/canteens/:id',
+  authenticate,
+  authorize(ROLES.ADMIN),
+  validateObjectId('id'),
+  deleteCanteen
 );
 
 module.exports = router;

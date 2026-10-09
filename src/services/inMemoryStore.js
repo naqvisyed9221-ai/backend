@@ -56,6 +56,22 @@ const memoryUsers = [
   }
 ];
 
+// Seed Categories
+let memoryCategories = [
+  { _id: 'cat_001', name: 'Burgers', description: 'Freshly grilled gourmet burgers', icon: 'lunch_dining', image: '', is_active: true, createdAt: new Date() },
+  { _id: 'cat_002', name: 'Meals', description: 'Wholesome rice, curries and complete meal platters', icon: 'dinner_dining', image: '', is_active: true, createdAt: new Date() },
+  { _id: 'cat_003', name: 'Beverages', description: 'Cold drinks, fresh juices and hot beverages', icon: 'local_cafe', image: '', is_active: true, createdAt: new Date() },
+  { _id: 'cat_004', name: 'Snacks', description: 'Crispy sides, fries and finger foods', icon: 'fastfood', image: '', is_active: true, createdAt: new Date() },
+  { _id: 'cat_005', name: 'Desserts', description: 'Sweet cakes, pastries and treats', icon: 'icecream', image: '', is_active: true, createdAt: new Date() },
+];
+
+// Seed Canteens
+let memoryCanteens = [
+  { _id: 'cant_001', name: 'Central Campus Hub', location: 'Main Academic Building Ground Floor', opening_time: '08:00', closing_time: '20:00', is_active: true, contact_number: '+92 300 1112233', createdAt: new Date() },
+  { _id: 'cant_002', name: 'Engineering Block Express', location: 'Block B, 1st Floor Cafeteria', opening_time: '08:30', closing_time: '18:30', is_active: true, contact_number: '+92 300 4445566', createdAt: new Date() },
+  { _id: 'cant_003', name: 'Hostel Night Canteen', location: 'Residential Quad Building C', opening_time: '18:00', closing_time: '02:00', is_active: true, contact_number: '+92 300 7778899', createdAt: new Date() },
+];
+
 // 2. Seed Rich Menu Items (16 diverse items across Fast Food, Meals, Beverages, Snacks, Desserts)
 let memoryMenuItems = [
   {
@@ -536,7 +552,67 @@ const InMemoryStore = {
   updateSettings: (newSettings) => {
     memorySettings = { ...memorySettings, ...newSettings };
     return memorySettings;
+  },
+
+  // Categories CRUD (Phase 5)
+  getCategories: () => [...memoryCategories],
+  getCategoryById: (id) => memoryCategories.find((c) => c._id === String(id)),
+  createCategory: (data) => {
+    const newCat = {
+      _id: 'cat_' + Date.now(),
+      name: data.name,
+      description: data.description || '',
+      icon: data.icon || 'restaurant',
+      image: data.image || '',
+      is_active: data.is_active !== undefined ? data.is_active : true,
+      createdAt: new Date()
+    };
+    memoryCategories.push(newCat);
+    return newCat;
+  },
+  updateCategory: (id, data) => {
+    const idx = memoryCategories.findIndex((c) => c._id === String(id));
+    if (idx === -1) return null;
+    memoryCategories[idx] = { ...memoryCategories[idx], ...data };
+    return memoryCategories[idx];
+  },
+  deleteCategory: (id) => {
+    const idx = memoryCategories.findIndex((c) => c._id === String(id));
+    if (idx === -1) return null;
+    const removed = memoryCategories.splice(idx, 1)[0];
+    return removed;
+  },
+
+  // Canteens CRUD (Phase 5)
+  getCanteens: () => [...memoryCanteens],
+  getCanteenById: (id) => memoryCanteens.find((c) => c._id === String(id)),
+  createCanteen: (data) => {
+    const newCanteen = {
+      _id: 'cant_' + Date.now(),
+      name: data.name,
+      location: data.location,
+      opening_time: data.opening_time || '08:00',
+      closing_time: data.closing_time || '20:00',
+      is_active: data.is_active !== undefined ? data.is_active : true,
+      contact_number: data.contact_number || '',
+      createdAt: new Date()
+    };
+    memoryCanteens.push(newCanteen);
+    return newCanteen;
+  },
+  updateCanteen: (id, data) => {
+    const idx = memoryCanteens.findIndex((c) => c._id === String(id));
+    if (idx === -1) return null;
+    memoryCanteens[idx] = { ...memoryCanteens[idx], ...data };
+    return memoryCanteens[idx];
+  },
+  deleteCanteen: (id) => {
+    const idx = memoryCanteens.findIndex((c) => c._id === String(id));
+    if (idx === -1) return null;
+    const removed = memoryCanteens.splice(idx, 1)[0];
+    return removed;
   }
 };
 
 module.exports = InMemoryStore;
+

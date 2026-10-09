@@ -1,6 +1,8 @@
 const User = require('../models/User');
 const SystemLog = require('../models/SystemLog');
 const CanteenSetting = require('../models/CanteenSetting');
+const Category = require('../models/Category');
+const CanteenAccount = require('../models/CanteenAccount');
 const asyncHandler = require('../utils/asyncHandler');
 const { DEFAULT_SETTINGS } = require('../config/constants');
 
@@ -159,10 +161,295 @@ const updateCanteenSettings = asyncHandler(async (req, res) => {
   });
 });
 
+/**
+ * Category Management (Phase 5)
+ */
+const getAllCategories = asyncHandler(async (req, res) => {
+  if (require('mongoose').connection.readyState !== 1) {
+    const InMemoryStore = require('../services/inMemoryStore');
+    const categories = InMemoryStore.getCategories();
+    return res.json({
+      message: 'Categories retrieved successfully',
+      count: categories.length,
+      data: categories
+    });
+  }
+
+  const categories = await Category.find().sort({ name: 1 });
+  return res.json({
+    message: 'Categories retrieved successfully',
+    count: categories.length,
+    data: categories
+  });
+});
+
+const createCategory = asyncHandler(async (req, res) => {
+  const { name, description, icon, image, is_active } = req.body;
+
+  if (require('mongoose').connection.readyState !== 1) {
+    const InMemoryStore = require('../services/inMemoryStore');
+    const existing = InMemoryStore.getCategories().find((c) => c.name.toLowerCase() === name.trim().toLowerCase());
+    if (existing) {
+      return res.status(400).json({ message: `Category "${name}" already exists.` });
+    }
+    const created = InMemoryStore.createCategory({ name: name.trim(), description, icon, image, is_active });
+    return res.status(201).json({
+      message: 'Category created successfully',
+      data: created
+    });
+  }
+
+  const existing = await Category.findOne({ name: { $regex: new RegExp(`^${name.trim()}$`, 'i') } });
+  if (existing) {
+    return res.status(400).json({ message: `Category "${name}" already exists.` });
+  }
+
+  const category = await Category.create({
+    name: name.trim(),
+    description: description || '',
+    icon: icon || 'restaurant',
+    image: image || '',
+    is_active: is_active !== undefined ? is_active : true
+  });
+
+  await SystemLog.create({
+    user_id: req.user._id,
+    user_name: req.user.name,
+    role: req.user.role,
+    action: 'CATEGORY_CREATED',
+    details: { categoryId: category._id, name: category.name }
+  });
+
+  return res.status(201).json({
+    message: 'Category created successfully',
+    data: category
+  });
+});
+
+const updateCategory = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+
+  if (require('mongoose').connection.readyState !== 1) {
+    const InMemoryStore = require('../services/inMemoryStore');
+    const updated = InMemoryStore.updateCategory(id, updateData);
+    if (!updated) {
+      return res.status(404).json({ message: 'Category not found', details: { id } });
+    }
+    return res.json({
+      message: 'Category updated successfully',
+      data: updated
+    });
+  }
+
+  const category = await Category.findById(id);
+  if (!category) {
+    return res.status(404).json({ message: 'Category not found', details: { id } });
+  }
+
+  if (updateData.name) category.name = updateData.name.trim();
+  if (updateData.description !== undefined) category.description = updateData.description;
+  if (updateData.icon !== undefined) category.icon = updateData.icon;
+  if (updateData.image !== undefined) category.image = updateData.image;
+  if (updateData.is_active !== undefined) category.is_active = updateData.is_active;
+
+  await category.save();
+
+  await SystemLog.create({
+    user_id: req.user._id,
+    user_name: req.user.name,
+    role: req.user.role,
+    action: 'CATEGORY_UPDATED',
+    details: { categoryId: category._id, updates: updateData }
+  });
+
+  return res.json({
+    message: 'Category updated successfully',
+    data: category
+  });
+});
+
+const deleteCategory = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (require('mongoose').connection.readyState !== 1) {
+    const InMemoryStore = require('../services/inMemoryStore');
+    const deleted = InMemoryStore.deleteCategory(id);
+    if (!deleted) {
+      return res.status(404).json({ message: 'Category not found', details: { id } });
+    }
+    return res.json({
+      message: 'Category deleted successfully',
+      data: deleted
+    });
+  }
+
+  const category = await Category.findByIdAndDelete(id);
+  if (!category) {
+    return res.status(404).json({ message: 'Category not found', details: { id } });
+  }
+
+  await SystemLog.create({
+    user_id: req.user._id,
+    user_name: req.user.name,
+    role: req.user.role,
+    action: 'CATEGORY_DELETED',
+    details: { categoryId: id, name: category.name }
+  });
+
+  return res.json({
+    message: 'Category deleted successfully',
+    data: category
+  });
+});
+
+/**
+ * Canteen Accounts Management (Phase 5)
+ */
+const getAllCanteens = asyncHandler(async (req, res) => {
+  if (require('mongoose').connection.readyState !== 1) {
+    const InMemoryStore = require('../services/inMemoryStore');
+    const canteens = InMemoryStore.getCanteens();
+    return res.json({
+      message: 'Canteen hubs retrieved successfully',
+      count: canteens.length,
+      data: canteens
+    });
+  }
+
+  const canteens = await CanteenAccount.find().sort({ name: 1 });
+  return res.json({
+    message: 'Canteen hubs retrieved successfully',
+    count: canteens.length,
+    data: canteens
+  });
+});
+
+const createCanteen = asyncHandler(async (req, res) => {
+  const { name, location, opening_time, closing_time, is_active, contact_number } = req.body;
+
+  if (require('mongoose').connection.readyState !== 1) {
+    const InMemoryStore = require('../services/inMemoryStore');
+    const created = InMemoryStore.createCanteen({ name, location, opening_time, closing_time, is_active, contact_number });
+    return res.status(201).json({
+      message: 'Canteen hub created successfully',
+      data: created
+    });
+  }
+
+  const canteen = await CanteenAccount.create({
+    name: name.trim(),
+    location: location.trim(),
+    opening_time: opening_time || '08:00',
+    closing_time: closing_time || '20:00',
+    is_active: is_active !== undefined ? is_active : true,
+    contact_number: contact_number || ''
+  });
+
+  await SystemLog.create({
+    user_id: req.user._id,
+    user_name: req.user.name,
+    role: req.user.role,
+    action: 'CANTEEN_ACCOUNT_CREATED',
+    details: { canteenId: canteen._id, name: canteen.name, location: canteen.location }
+  });
+
+  return res.status(201).json({
+    message: 'Canteen hub created successfully',
+    data: canteen
+  });
+});
+
+const updateCanteen = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+
+  if (require('mongoose').connection.readyState !== 1) {
+    const InMemoryStore = require('../services/inMemoryStore');
+    const updated = InMemoryStore.updateCanteen(id, updateData);
+    if (!updated) {
+      return res.status(404).json({ message: 'Canteen hub not found', details: { id } });
+    }
+    return res.json({
+      message: 'Canteen hub updated successfully',
+      data: updated
+    });
+  }
+
+  const canteen = await CanteenAccount.findById(id);
+  if (!canteen) {
+    return res.status(404).json({ message: 'Canteen hub not found', details: { id } });
+  }
+
+  if (updateData.name) canteen.name = updateData.name.trim();
+  if (updateData.location) canteen.location = updateData.location.trim();
+  if (updateData.opening_time !== undefined) canteen.opening_time = updateData.opening_time;
+  if (updateData.closing_time !== undefined) canteen.closing_time = updateData.closing_time;
+  if (updateData.is_active !== undefined) canteen.is_active = updateData.is_active;
+  if (updateData.contact_number !== undefined) canteen.contact_number = updateData.contact_number;
+
+  await canteen.save();
+
+  await SystemLog.create({
+    user_id: req.user._id,
+    user_name: req.user.name,
+    role: req.user.role,
+    action: 'CANTEEN_ACCOUNT_UPDATED',
+    details: { canteenId: canteen._id, updates: updateData }
+  });
+
+  return res.json({
+    message: 'Canteen hub updated successfully',
+    data: canteen
+  });
+});
+
+const deleteCanteen = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (require('mongoose').connection.readyState !== 1) {
+    const InMemoryStore = require('../services/inMemoryStore');
+    const deleted = InMemoryStore.deleteCanteen(id);
+    if (!deleted) {
+      return res.status(404).json({ message: 'Canteen hub not found', details: { id } });
+    }
+    return res.json({
+      message: 'Canteen hub deleted successfully',
+      data: deleted
+    });
+  }
+
+  const canteen = await CanteenAccount.findByIdAndDelete(id);
+  if (!canteen) {
+    return res.status(404).json({ message: 'Canteen hub not found', details: { id } });
+  }
+
+  await SystemLog.create({
+    user_id: req.user._id,
+    user_name: req.user.name,
+    role: req.user.role,
+    action: 'CANTEEN_ACCOUNT_DELETED',
+    details: { canteenId: id, name: canteen.name }
+  });
+
+  return res.json({
+    message: 'Canteen hub deleted successfully',
+    data: canteen
+  });
+});
+
 module.exports = {
   getAllUsers,
   updateUserRoleAndStatus,
   getSystemLogs,
   getCanteenSettings,
-  updateCanteenSettings
+  updateCanteenSettings,
+  getAllCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+  getAllCanteens,
+  createCanteen,
+  updateCanteen,
+  deleteCanteen
 };
