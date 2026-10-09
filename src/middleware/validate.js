@@ -97,6 +97,20 @@ const updateOrderStatusSchema = z.object({
   delay_reason: z.string().max(300).optional()
 });
 
+const updatePaymentStatusSchema = z.object({
+  payment_status: z.enum(Object.values(PAYMENT_STATUS), {
+    errorMap: () => ({ message: `Invalid payment status. Must be one of: ${Object.values(PAYMENT_STATUS).join(', ')}` })
+  }),
+  payment_method: z.string().optional()
+});
+
+const updatePickupTimeSchema = z.object({
+  pickup_time: z.string().optional(),
+  pickup_slot: z.string().optional()
+}).refine((data) => data.pickup_time || data.pickup_slot, {
+  message: 'Must provide pickup_time or pickup_slot'
+});
+
 const verifyTokenSchema = z.object({
   token_number: z.string().trim().optional(),
   order_id: z.string().trim().optional(),
@@ -130,6 +144,56 @@ const canteenSettingsSchema = z.object({
   categories: z.array(z.string()).optional()
 });
 
+const createStaffSchema = z.object({
+  name: z.string().trim().min(2, 'Name must be at least 2 characters'),
+  email: z.string().trim().email('Invalid email address').toLowerCase(),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  phone: z.string().optional(),
+  account_status: z.enum(Object.values(ACCOUNT_STATUS)).optional()
+});
+
+const updateStaffSchema = z.object({
+  name: z.string().trim().min(2).optional(),
+  email: z.string().trim().email().toLowerCase().optional(),
+  password: z.string().min(6).optional(),
+  phone: z.string().optional(),
+  account_status: z.enum(Object.values(ACCOUNT_STATUS)).optional()
+});
+
+const categorySchema = z.object({
+  name: z.string().trim().min(1, 'Category name is required'),
+  description: z.string().optional().default(''),
+  icon: z.string().optional().default('restaurant'),
+  image: z.string().optional().default(''),
+  is_active: z.boolean().optional().default(true)
+});
+
+const updateCategorySchema = z.object({
+  name: z.string().trim().min(1).optional(),
+  description: z.string().optional(),
+  icon: z.string().optional(),
+  image: z.string().optional(),
+  is_active: z.boolean().optional()
+});
+
+const canteenAccountSchema = z.object({
+  name: z.string().trim().min(1, 'Canteen name is required'),
+  location: z.string().trim().min(1, 'Location is required'),
+  opening_time: z.string().optional().default('08:00'),
+  closing_time: z.string().optional().default('20:00'),
+  is_active: z.boolean().optional().default(true),
+  contact_number: z.string().optional().default('')
+});
+
+const updateCanteenAccountSchema = z.object({
+  name: z.string().trim().min(1).optional(),
+  location: z.string().trim().min(1).optional(),
+  opening_time: z.string().optional(),
+  closing_time: z.string().optional(),
+  is_active: z.boolean().optional(),
+  contact_number: z.string().optional()
+});
+
 module.exports = {
   validate,
   validateObjectId,
@@ -138,8 +202,17 @@ module.exports = {
   createOrderSchema,
   cancelOrderSchema,
   updateOrderStatusSchema,
+  updatePaymentStatusSchema,
+  updatePickupTimeSchema,
   verifyTokenSchema,
   menuItemSchema,
   updateStockAvailabilitySchema,
-  canteenSettingsSchema
+  canteenSettingsSchema,
+  createStaffSchema,
+  updateStaffSchema,
+  categorySchema,
+  updateCategorySchema,
+  canteenAccountSchema,
+  updateCanteenAccountSchema
 };
+

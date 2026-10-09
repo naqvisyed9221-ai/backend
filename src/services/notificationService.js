@@ -90,6 +90,35 @@ const notifyPickupApproaching = async (order, minutesLeft = 10) => {
   });
 };
 
+const notifyPickupTimeChanged = async (order, newPickupTime, slot = '') => {
+  const timeFormatted =
+    newPickupTime instanceof Date
+      ? newPickupTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      : String(newPickupTime || slot);
+
+  const notification = await notifyUser({
+    userId: order.customer_id,
+    orderId: order._id,
+    tokenNumber: order.token_number,
+    type: NOTIFICATION_TYPES.PICKUP_TIME_CHANGED,
+    title: 'Scheduled Pickup Time Updated',
+    message: `Your scheduled pickup time has been updated to ${slot || timeFormatted}.`
+  });
+
+  if (ioInstance) {
+    ioInstance.to(`user_${order.customer_id}`).emit('pickup_time_changed', {
+      orderId: order._id,
+      order_id: order.order_id,
+      tokenNumber: order.token_number,
+      pickup_time: newPickupTime,
+      pickup_slot: slot,
+      message: 'Your scheduled pickup time has been updated.'
+    });
+  }
+
+  return notification;
+};
+
 const notifyOrderCancelled = async (order, reason = '') => {
   return notifyUser({
     userId: order.customer_id,
@@ -103,11 +132,13 @@ const notifyOrderCancelled = async (order, reason = '') => {
 
 module.exports = {
   setSocketIOInstance,
+  getSocketIOInstance: () => ioInstance,
   notifyUser,
   notifyOrderAccepted,
   notifyOrderPreparing,
   notifyOrderDelayed,
   notifyOrderReady,
   notifyPickupApproaching,
+  notifyPickupTimeChanged,
   notifyOrderCancelled
 };
